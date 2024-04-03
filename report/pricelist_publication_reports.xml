@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <record id="action_report_pricelist_publication" model="ir.actions.report">
+        <field name="name">Pricelist publication</field>
+        <field name="model">pricelist.publication</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">jt_pricelist_publisher.pricelist_publication_report_template</field>
+        <field name="report_file">jt_pricelist_publisher.pricelist_publication_report_template</field>
+        <field name="print_report_name">'%s' % object.name</field>
+        <field name="binding_model_id" ref="model_pricelist_publication" />
+        <field name="binding_type">report</field>
+
+    </record> -->
+
+    <record id="action_report_pricelist_publication_wizard" model="ir.actions.report">
+        <field name="name">Pricelist publication Wizard</field>
+        <field name="model">pricelist.publishing.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">jt_pricelist_publisher.publication_report_wizard</field>
+        <field name="report_file">jt_pricelist_publisher.publication_report_wizard</field>
+        <field name="print_report_name">'%s' % object.name</field>
+        <field name="binding_model_id" eval="False" />
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_repeat_pricelist"/>
+    </record>
+
+
+    <!-- Paper Format -->
+    <record id="paperformat_repeat_pricelist" model="report.paperformat">
+        <field name="name">Repeat Pricelist</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">25</field>
+        <field name="disable_shrinking" eval="True"/>
+        <field name="dpi">96</field>
+    </record>    
+</odoo>

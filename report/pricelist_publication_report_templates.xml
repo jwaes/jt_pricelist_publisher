@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="pricelist_publication_report_template">
+        <t t-foreach="docs" t-as="publication">
+            <t t-call="jt_pricelist_publisher.pricelist_publication_report_document" />
+        </t>
+    </template>
+
+    <template id="publication_report_wizard">
+        <t t-call="jt_pricelist_publisher.pricelist_publication_report_document" t-lang="lang" />
+    </template>
+
+    <template id="pricelist_publication_report_document">
+        <t t-call="jt_pricelist_publisher.html_container">
+            <t t-call="jt_pricelist_publisher.external_layout_repeat_pricelist">
+                
+                    <div t-foreach="publication.section_ids" t-as="section">
+                        <div class="page repeat_pricelist" >
+                        <t t-if="section.block_id.block_type == 'html'">
+                            <t t-call="jt_pricelist_publisher.pricelist_publication_html">
+                                <t t-set="block" t-value="section.block_id" />
+                            </t>
+                        </t>
+                        <t t-elif="section.block_id.block_type in ['template','view']">
+                            <t t-call="jt_pricelist_publisher.pricelist_publication_template">
+                                <t t-set="block" t-value="section.block_id" />
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-out="0" />
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="html_container">
+        <t t-set="body_classname" t-value="'repeat_pricelist'"/>
+        <t t-call="jt_pricelist_publisher.report_layout">
+            <t t-out="0"/>
+        </t>
+    </template>
+
+    <template id="report_layout" inherit_id="web.report_layout">
+        <!-- <xpath expr="//body" position="attributes">
+            <attribute name="style">background-color: transparent !important;</attribute>
+        </xpath> -->
+        <!-- <xpath expr="//div[@id='wrapwrap']" position="attributes">
+            <attribute name="class">repeat_pricelist</attribute>
+        </xpath> -->
+        <xpath expr="//body" position="attributes">
+            <attribute name="t-att-class">'container repeat_pricelist' if not full_width else 'container-fluid'</attribute>
+        </xpath>
+    </template>
+
+    <template id="pricelist_publication_html">
+        <div class="section_html">
+            <t t-out="block.html_content" />
+        </div>
+    </template>
+
+    <template id="pricelist_publication_template">
+        <t t-out="block.with_context(pricelist_id=pricelist.id, publication_id=publication.id, pricelist_date=pricelist_date, quarter_number=quarter_number )._render_template()" />
+    </template>
+
+
+    <template id="external_layout_repeat_pricelist">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <t t-call="jt_pricelist_publisher.external_layout_standard_pricelist2"><t t-out="0"/></t>
+
+    </template>
+
+    <template id="external_layout_standard_pricelist2">
+        <div t-attf-class="header not-first-page" t-att-style="report_header_style">
+            <div class="row">
+                <div class="col-4 text-left">
+                </div>
+                <div class="col-4 text-center">
+                    <img src="/jt_pricelist_publisher/static/src/img/repeat.png" alt="Repeat" height="40" title="Repeat Logo"/>
+                </div>
+                <div class="col-4 text-right">
+                </div>
+            </div>
+        </div>
+
+
+        <div t-attf-class="article o_report_layout_repeat"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+  
+            <div  style="page-break-after: always; height: 1px">
+            <!-- empty first page-->    
+            </div>
+
+            <t t-out="0"/>
+        </div>
+
+        <div t-attf-class="footer o_standard_footer not-first-page" >
+            <div class="row small">
+                <div class="col-4 text-left">
+                    <a href="https://www.repeatmaterials.com" class="text-muted">www.repeatmaterials.com</a>
+                </div>
+                <div class="col-4 text-center">
+                    <div t-if="report_type == 'pdf'" class="text-muted">
+                        <span class="page"/> / <span class="topage"/>
+                    </div>
+                </div>
+                <div class="col-4 text-right text-muted text-monospace opacity-10" style="font-size: 0.5rem;">
+                    <!-- <a href="tel:+32487624115" class="text-muted">+32 487 62 41 15</a> -->
+                    <span t-esc="publication_instance_code"/>
+                </div>
+            </div>
+        </div>
+
+    </template>
+
+</odoo>

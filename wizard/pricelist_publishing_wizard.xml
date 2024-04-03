@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pricelist_publishing_wizard_view_form" model="ir.ui.view">
+        <field name="name">pricelist.publishing.wizard.view.form</field>
+        <field name="model">pricelist.publishing.wizard</field>
+        <field name="arch" type="xml">
+            <form string="PDF Pricelist Publication">
+                    <group>
+                        <field name="publication_id"/>
+                        <field name="pricelist_id"/>
+                        <field name="which_quarter"/>
+                        <field name="lang"/>
+                    </group>
+                    <footer>
+                        <button string="Print" name="action_print_report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>                    
+            </form>
+        </field>
+    </record>
+
+    <record id="pricelist_publishing_wizard_report" model="ir.actions.act_window">
+        <field name="name">Pricelist Publishing Wizard</field>
+        <field name="res_model">pricelist.publishing.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>      
+
+    <menuitem id="menu_action_pricelist_publishing_wizard_report" name="Pricelist Publishing Wizard" action="pricelist_publishing_wizard_report" parent="jt_pricelist_publisher.pricelist_publication_menu"/>
+
+</odoo>

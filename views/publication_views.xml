@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+  <record id="pricelist_publication_view_tree" model="ir.ui.view">
+    <field name="name">pricelist.publication.view.tree</field>
+    <field name="model">pricelist.publication</field>
+    <field name="arch" type="xml">
+      <tree string="">
+        <field name="name" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="pricelist_publication_view_form" model="ir.ui.view">
+    <field name="name">pricelist.publication.view.form</field>
+    <field name="model">pricelist.publication</field>
+    <field name="arch" type="xml">
+      <form string="">
+        <sheet>
+          <group>
+            <field name="name" />
+
+          </group>
+          <notebook>
+            <page name="sections" string="Sections">
+              <field name="section_ids">
+                <tree string="Sections">
+
+                  <field name="sequence" widget="handle" />
+                  <field name="name" />
+                </tree>
+              </field>
+            </page>
+            <page name="background" string="Background">
+              <group>
+                <field
+                  name="pdf_background"
+                  widget="pdf_viewer"
+                  help="Upload a pdf file to use as a page background" />
+                <field name="pdf_background_pages" />
+              </group>
+            </page>
+          </notebook>
+
+
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+
+  <record id="pricelist_publication_action" model="ir.actions.act_window">
+    <field name="name">Pricelist publications</field>
+    <field name="res_model">pricelist.publication</field>
+    <field name="view_mode">tree,form</field>
+
+  </record>
+
+
+  <record id="pricelist_publication_action_server" model="ir.actions.server">
+    <field name="name">Action Name</field>
+    <field name="model_id" ref="model_pricelist_publication" />
+    <field name="state">code</field>
+    <field name="code">
+      action = {
+      "type": "ir.actions.act_window",
+      "view_mode": "tree,form",
+      "res_model": model._name,
+      }
+    </field>
+  </record>
+
+  <menuitem
+    id="pricelist_publication_menu"
+    name="Pricelist publications"
+    parent="sale.menu_sale_report"
+    sequence="10">
+    <menuitem
+      id="pricelist_publications"
+      name="Publications"
+      action="jt_pricelist_publisher.pricelist_publication_action"
+    />
+  </menuitem>
+
+</odoo>
