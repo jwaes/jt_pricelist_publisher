@@ -9,7 +9,7 @@ class Pricelist(models.Model):
 
     description = fields.Html('Description', default='', translate=True, help="This description gets printed on the pricelist publications")
 
-    description_internal = fields.Text('Description internal', helpt="This is for internal use only, describe for who this pricelist is intended, what discounts can be applied")
+    description_internal = fields.Text('Description internal', help="This is for internal use only, describe for who this pricelist is intended, what discounts can be applied")
 
 
 class PricelistItem(models.Model):

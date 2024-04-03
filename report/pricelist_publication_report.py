@@ -3,6 +3,7 @@ from odoo import models, fields, api
 
 class ReportPublicationPricelist(models.AbstractModel):
     _name = 'report.jt_pricelist_publisher.publication_report_wizard'
+    _description = 'Report for pricelist publication'
 
     def _get_report_values(self, docids, data=None):
 
