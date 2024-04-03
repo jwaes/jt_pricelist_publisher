@@ -13,19 +13,6 @@
 
     </record> -->
 
-    <record id="action_report_pricelist_publication_wizard" model="ir.actions.report">
-        <field name="name">Pricelist publication Wizard</field>
-        <field name="model">pricelist.publishing.wizard</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">jt_pricelist_publisher.publication_report_wizard</field>
-        <field name="report_file">jt_pricelist_publisher.publication_report_wizard</field>
-        <field name="print_report_name">'%s' % object.name</field>
-        <field name="binding_model_id" eval="False" />
-        <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="paperformat_repeat_pricelist"/>
-    </record>
-
-
     <!-- Paper Format -->
     <record id="paperformat_repeat_pricelist" model="report.paperformat">
         <field name="name">Repeat Pricelist</field>
@@ -41,4 +28,19 @@
         <field name="disable_shrinking" eval="True"/>
         <field name="dpi">96</field>
     </record>    
+
+    <record id="action_report_pricelist_publication_wizard" model="ir.actions.report">
+        <field name="name">Pricelist publication Wizard</field>
+        <field name="model">pricelist.publishing.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">jt_pricelist_publisher.publication_report_wizard</field>
+        <field name="report_file">jt_pricelist_publisher.publication_report_wizard</field>
+        <field name="print_report_name">'%s' % object.name</field>
+        <field name="binding_model_id" eval="False" />
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="jt_pricelist_publisher.paperformat_repeat_pricelist"/>
+    </record>
+
+
+
 </odoo>
