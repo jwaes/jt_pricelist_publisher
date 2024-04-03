@@ -12,14 +12,16 @@ logger = getLogger(__name__)
 try:
     # we need this to be sure PIL has loaded PDF support
     from PIL import PdfImagePlugin  # noqa: F401
+    logger.info("PIL imported")
 except ImportError:
     logger.error("ImportError: The PdfImagePlugin could not be imported")
 
 try:
     from PyPDF2 import PdfFileReader, PdfFileWriter  # pylint: disable=W0404
     from PyPDF2.utils import PdfReadError  # pylint: disable=W0404
+    logger.info("PyPDF2 imported")
 except ImportError:
-    logger.debug("Can not import PyPDF2")
+    logger.error("Can not import PyPDF2")
 
 
 class Report(models.Model):
