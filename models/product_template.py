@@ -18,6 +18,21 @@ class ProductTemplate(models.Model):
                 template.dimensions_string = match.group(1)
                 if template.thickness:
                     template.dimensions_string += 'x' + template.thickness
+                else:
+                    thicknesses = template.product_variant_ids.mapped('thickness')
+                    low = int(min(thicknesses))
+                    high = int(max(thicknesses))
+                    # for i, variant in template.product_variant_ids:
+                    #     if variant.thickness:
+                    #         if variant.thickness >= high:
+                    #             high = variant.thickness
+                    #         elif variant.thickness <= low:
+                    #             low = variant.thickness
+                    if low == high:
+                        if low != 0.0:
+                            template.dimensions_string += 'x' + str(low)
+                    else:
+                        template.dimensions_string += 'x(' + str(low) + '-' + str(high) + ')'
             else:
                 template.dimensions_string = template.uom_id.name
 
