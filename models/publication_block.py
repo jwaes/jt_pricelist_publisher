@@ -50,8 +50,7 @@ class PricelistPublicationBlock(models.Model):
     def _render_template(self, lang=None):
         if not lang:
             lang = self.env.context.get('lang')
-        self_ctxt = self.with_context(lang=lang)
-        html = self_ctxt.env['ir.qweb']._render(self.view_id.id, self._collect_vals())
+        html = self.env['ir.qweb']._render(self.view_id.id, self._collect_vals(), lang=lang)
         return html
 
     def _collect_vals(self):

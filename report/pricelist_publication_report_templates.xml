@@ -57,12 +57,12 @@
 
     <template id="pricelist_publication_html">
         <div class="section_html">
-            <t t-out="block.html_content" />
+            <t t-out="block.with_context(lang=lang).html_content" />
         </div>
     </template>
 
     <template id="pricelist_publication_template">
-        <t t-out="block.with_context(pricelist_id=pricelist.id, publication_id=publication.id, pricelist_date=pricelist_date, quarter_number=quarter_number )._render_template()" />
+        <t t-out="block.with_context(pricelist_id=pricelist.id, publication_id=publication.id, pricelist_date=pricelist_date, quarter_number=quarter_number, lang=lang)._render_template(lang=lang)" />
     </template>
 
 

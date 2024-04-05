@@ -10,8 +10,12 @@ class PricelistPublishingWizard(models.TransientModel):
     _name = 'pricelist.publishing.wizard'
     _description = 'Pricelist Publishing Wizard'
 
+    @api.model
+    def _selection_languages(self):
+        return self.env['res.lang'].get_installed()
 
-    lang = fields.Char(
+
+    lang = fields.Selection(_selection_languages,
         string="Lang",
         default=lambda self: self._default_language(),
     )

@@ -24,7 +24,7 @@ $o-repeat-report-green: #587369 !default;
         display: inline-block;
         padding-bottom: 5px;
         position: relative;
-        margin-bottom: 2rem; 
+        margin-bottom: 3rem; 
     }
     
     h2:before {
@@ -48,9 +48,6 @@ $o-repeat-report-green: #587369 !default;
                 border-top: none;
             }
 
-            th:first-child {
-                border-right: 1px solid $table-border-color;
-            }
         }
 
         tbody {
@@ -59,6 +56,15 @@ $o-repeat-report-green: #587369 !default;
                 border-right: 1px solid $table-border-color;
             }
         }
+    }
+
+    table.dimensioned {
+        thead {
+            th:first-child {
+                border-right: 1px solid $table-border-color;
+            }
+        }
+
     }
 
     .repeat-green {
