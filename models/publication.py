@@ -10,7 +10,7 @@ class PricelistPublication(models.Model):
     description = fields.Char('Description')
     sequence = fields.Integer(string="Sequence", help="Define the display order")
     
-    section_ids = fields.Many2many('pricelist.publication.section', 'publication_id', string='Sections')
+    section_ids = fields.One2many('pricelist.publication.section', 'publication_id', string='Sections')
 
     pdf_background = fields.Binary("Background")
     pdf_background_pages =  fields.Char("Background page numbers")
@@ -31,7 +31,7 @@ class PricelistPublicationSection(models.Model):
     _description = 'Pricelist Publication Section'
     _order = 'sequence asc, id desc'
 
-    sequence = fields.Integer(string="Sequence", help="Define the display order")
+    sequence = fields.Integer(string="Sequence", help="Define the display order", default=10)
     publication_id = fields.Many2one('pricelist.publication', string='Publication')
     block_id = fields.Many2one('pricelist.publication.block', string='Block')
     name = fields.Char('name', related="block_id.name")

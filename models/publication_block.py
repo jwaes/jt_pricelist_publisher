@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.translate import xml_translate, TRANSLATED_ATTRS
 from odoo.tools import safe_eval
 import datetime
+import re
 
 
 XML_ID_PREFIX = 'pricelist_publisher.block'
@@ -18,6 +20,7 @@ class PricelistPublicationBlock(models.Model):
         ('html', 'html'),
         ('pdf', 'pdf'),
         ('template', 'model template'),
+        ('template_dimension', 'model template - dimensioned'),
         ('view', 'simple template')
     ], string='Type', default='html')
 
@@ -32,7 +35,13 @@ class PricelistPublicationBlock(models.Model):
     model_name = fields.Char(related="model_id.model", string="Model Name", readonly=True, inverse="_inverse_model_name")    
     filter_domain = fields.Char(string='Apply on', help="If present, this condition must be satisfied before executing the action rule.")
 
+    dimension_attribute_id = fields.Many2one('product.attribute', string='Dimension Attribute')
 
+    @api.onchange('block_type')
+    def _onchange_block_type(self):
+        for rec in self:
+            if rec.block_type == 'template_dimension':
+                rec.model_id = self.env['ir.model']._get('product.template')
 
     def _inverse_model_name(self):
         for rec in self:
@@ -41,7 +50,11 @@ class PricelistPublicationBlock(models.Model):
     def _render_template(self, lang=None):
         if not lang:
             lang = self.env.context.get('lang')
+        self_ctxt = self.with_context(lang=lang)
+        html = self_ctxt.env['ir.qweb']._render(self.view_id.id, self._collect_vals())
+        return html
 
+    def _collect_vals(self):
 
         pricelist = None
         ctx_pricelist_id = self.env.context.get('pricelist_id')
@@ -76,21 +89,52 @@ class PricelistPublicationBlock(models.Model):
             company = self.env.company
 
         records = None
-        self_ctxt = self.with_context(lang=lang)
+
         self_sudo = self.sudo()
         if self.filter_domain:
             domain = safe_eval.safe_eval(self_sudo.filter_domain, self._get_eval_context())
-            records = self.env[self.model_name].search(domain)
+            records = self.env[self.model_name].search(domain)       
 
-        html = self_ctxt.env['ir.qweb']._render(self.view_id.id, {
+
+        vals = {
             'records': records,
             'pricelist': pricelist,
             'publication': publication,
             'quarter_number': quarter_number,
             'pricelist_date': pricelist_date,
             'company': company,
-        })
-        return html
+        }
+
+        if self.block_type == 'template_dimension':
+            dimensioned_products = []
+            for template in records:
+                if self.dimension_attribute_id not in template.attribute_line_ids.attribute_id:
+                    raise UserError(_("Product template '%s' does not have the required product attribute: %s", template.name, self.dimension_attribute_id.name))
+
+                attribute_values = template.product_variant_ids.mapped('product_template_attribute_value_ids').filtered(lambda r: r.attribute_id == self.dimension_attribute_id)
+                dim = attribute_values.mapped(lambda r: (r.ptav_product_variant_ids, int(r.name.split("x")[0]), int(re.sub("[^0-9]","",r.name.split("x")[1]))))
+                # dim2 = sorted(dim, key=lambda r: (r[1], r[2]))                
+                dxs = sorted(set(map(lambda x: x[1], dim)))
+                dys = sorted(set(map(lambda x: x[2], dim)))
+                
+                matrix = [[None]*len(dys)]*len(dxs)
+
+                rows = []
+                for dx in dxs:
+                    cols = []
+                    for dy in dys:
+                        found = [item for item in dim if item[1] == dx and item[2] == dy]
+                        if found:
+                            cols.append(found[0][0][0])
+                        else:
+                            cols.append(None)
+                    rows.append(cols)
+                dimensioned_products.append((template, dxs, dys, rows))
+            vals['dimensioned_products'] = dimensioned_products
+                
+
+        return vals
+
 
     def _get_eval_context(self):
         """ Prepare the context used when evaluating python code
@@ -105,7 +149,7 @@ class PricelistPublicationBlock(models.Model):
         }        
 
     def _ensure_view(self):
-        if self.block_type in ['template','view'] and not self.view_id:
+        if self.block_type in ['template','template_dimension','view'] and not self.view_id:
 
             view_vals = {
             'name': '%s (%s)' % (self._description, self.name),

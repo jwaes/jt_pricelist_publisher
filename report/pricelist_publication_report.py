@@ -16,6 +16,7 @@ class ReportPublicationPricelist(models.AbstractModel):
         publication = self.env['pricelist.publication'].browse(
             data.get('publication_id'))
 
+
         # self.env.context.update({
         #     'pricelist_id': pricelist_id,
         # })

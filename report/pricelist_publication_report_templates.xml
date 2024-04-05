@@ -22,7 +22,7 @@
                                 <t t-set="block" t-value="section.block_id" />
                             </t>
                         </t>
-                        <t t-elif="section.block_id.block_type in ['template','view']">
+                        <t t-elif="section.block_id.block_type in ['template','template_dimension','view']">
                             <t t-call="jt_pricelist_publisher.pricelist_publication_template">
                                 <t t-set="block" t-value="section.block_id" />
                             </t>

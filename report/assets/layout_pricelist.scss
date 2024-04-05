@@ -39,12 +39,24 @@ $o-repeat-report-green: #587369 !default;
     table {
 
         margin-top: 2rem;
+        
 
         thead {
             color: $o-repeat-report-green;
 
             th {
                 border-top: none;
+            }
+
+            th:first-child {
+                border-right: 1px solid $table-border-color;
+            }
+        }
+
+        tbody {
+            th {
+                color: $o-repeat-report-green;
+                border-right: 1px solid $table-border-color;
             }
         }
     }

@@ -28,13 +28,14 @@
             <page string="HTML" name="html" attrs="{'invisible':[('block_type','!=', 'html')]}">
                 <field name="html_content"/>
             </page>
-            <page string="Template" name="template" attrs="{'invisible':[('block_type','not in', ['template','view'])]}">
+            <page string="Template" name="template" attrs="{'invisible':[('block_type','not in', ['template','template_dimension','view'])]}">
                 <group>
                 <field name="view_id" attrs="{'readonly':True}"/>
                 <field name="model_name" invisible="1"/>
 
-                <field name="model_id" options="{'no_create': True, 'no_open': True}"  attrs="{'invisible':[('block_type','not in', ['template'])]}"/>                
-                <field name="filter_domain" widget="domain" options="{'model': 'model_name', 'in_dialog': True}" attrs="{'invisible':[('block_type','not in', ['template'])]}"/>
+                <field name="model_id" options="{'no_create': True, 'no_open': True}"  attrs="{'invisible':[('block_type','not in', ['template','template_dimension'])]}"/>                
+                <field name="filter_domain" widget="domain" options="{'model': 'model_name', 'in_dialog': True}" attrs="{'invisible':[('block_type','not in', ['template','template_dimension'])]}"/>
+                <field name="dimension_attribute_id" widget="tags" options="{'no_create': True, 'no_open': True}" attrs="{'invisible':[('block_type','not in', ['template_dimension'])]}"/>
             </group>
             </page>            
         </notebook>          
