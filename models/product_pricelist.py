@@ -2,6 +2,8 @@ from odoo import api, fields, models
 from odoo.tools import date_utils
 from datetime import datetime
 from pytz import timezone, UTC
+from odoo.exceptions import ValidationError
+import math
 
 
 class Pricelist(models.Model):
@@ -20,8 +22,17 @@ class PricelistItem(models.Model):
         ('quarter', 'Quarter'),
     ], string='Daterange type', default="default")
 
-    daterange_q = fields.Integer(string='Q', default="1")
-    daterange_q_year = fields.Integer('YYYY', default="2024")
+    def _get_default_q_year(self):
+        value = fields.Datetime.now().year
+        return int(value)
+
+    def _get_default_q(self):
+        value = fields.Datetime.now().month / 3
+        value = math.ceil(value)
+        return int(value)
+
+    daterange_q = fields.Integer(string='Q', default=_get_default_q)
+    daterange_q_year = fields.Integer('YYYY', default=_get_default_q_year)
 
     quarter = fields.Char(compute='_compute_quarter', string='Quarter')
     
@@ -50,6 +61,11 @@ class PricelistItem(models.Model):
         if self.daterange_q_year:
             self._calculate_daterange()
 
+    @api.onchange('daterange_type')
+    def _onchange_daterange_type(self):
+        if self.daterange_type == 'quarter':
+            self._calculate_daterange()            
+
     def _calculate_daterange(self):
         self._check_value()
         if self.daterange_type == 'quarter':        
@@ -64,7 +80,5 @@ class PricelistItem(models.Model):
             self.date_end = ending_date_utc.replace(tzinfo=None)
             self.date_start = starter_date_utc.replace(tzinfo=None)
         else:
-            self.daterange_q = None
-            self.daterange_q_year = None
-
- 
+            self.daterange_q = self._get_default_q()
+            self.daterange_q_year = self._get_default_q_year()
