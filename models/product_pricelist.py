@@ -46,25 +46,29 @@ class PricelistItem(models.Model):
 
     @api.constrains('daterange_q_year','daterange_q')
     def _check_value(self):
-        if self.daterange_q_year > 3000 or self.daterange_q_year < 2000:
-            raise ValidationError(_('Enter a valid year'))
-        if self.daterange_q > 4 or self.daterange_q < 1:
-            raise ValidationError(_('Enter a valid quarter'))            
+        for rec in self:
+            if rec.daterange_q_year > 3000 or rec.daterange_q_year < 2000:
+                raise ValidationError(_('Enter a valid year'))
+            if rec.daterange_q > 4 or rec.daterange_q < 1:
+                raise ValidationError(_('Enter a valid quarter'))            
 
     @api.onchange('daterange_q')
     def _onchange_daterange_q(self):
-        self._calculate_daterange()
+        for rec in self:
+            rec._calculate_daterange()
 
 
     @api.onchange('daterange_q_year')
     def _onchange_daterange_q_year(self):
-        if self.daterange_q_year:
-            self._calculate_daterange()
+        for rec in self:
+            if rec.daterange_q_year:
+                rec._calculate_daterange()
 
     @api.onchange('daterange_type')
     def _onchange_daterange_type(self):
-        if self.daterange_type == 'quarter':
-            self._calculate_daterange()            
+        for rec in self:
+            if rec.daterange_type == 'quarter':
+                rec._calculate_daterange()            
 
     def _calculate_daterange(self):
         self._check_value()
