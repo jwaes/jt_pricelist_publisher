@@ -71,18 +71,19 @@ class PricelistItem(models.Model):
                 rec._calculate_daterange()            
 
     def _calculate_daterange(self):
-        self._check_value()
-        if self.daterange_type == 'quarter':        
-            month = ((self.daterange_q - 1) * 3) + 1
-            tz = timezone(self.env.user.tz or 'UTC')
-            starter_date = datetime(year=self.daterange_q_year, month=month, day=1, hour=0, minute=0, second=0)
-            ending_date = date_utils.end_of(starter_date, "quarter").replace(hour=23, minute=59, second=59)
+        for rec in self:
+            rec._check_value()
+            if rec.daterange_type == 'quarter':        
+                month = ((rec.daterange_q - 1) * 3) + 1
+                tz = timezone(self.env.user.tz or 'UTC')
+                starter_date = datetime(year=rec.daterange_q_year, month=month, day=1, hour=0, minute=0, second=0)
+                ending_date = date_utils.end_of(starter_date, "quarter").replace(hour=23, minute=59, second=59)
 
-            starter_date_utc = tz.localize(starter_date).astimezone(UTC)
-            ending_date_utc = tz.localize(ending_date).astimezone(UTC)
+                starter_date_utc = tz.localize(starter_date).astimezone(UTC)
+                ending_date_utc = tz.localize(ending_date).astimezone(UTC)
 
-            self.date_end = ending_date_utc.replace(tzinfo=None)
-            self.date_start = starter_date_utc.replace(tzinfo=None)
-        else:
-            self.daterange_q = self._get_default_q()
-            self.daterange_q_year = self._get_default_q_year()
+                rec.date_end = ending_date_utc.replace(tzinfo=None)
+                rec.date_start = starter_date_utc.replace(tzinfo=None)
+            else:
+                rec.daterange_q = rec._get_default_q()
+                rec.daterange_q_year = rec._get_default_q_year()
