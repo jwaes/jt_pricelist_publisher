@@ -5,9 +5,9 @@ import re
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    internal_ref_common = fields.Char(compute='_compute_internal_ref_common', string='internal_ref_common')
+    internal_ref_common = fields.Char(compute='_compute_internal_ref_common', string='Common Ref')
 
-    dimensions_string = fields.Char(compute='_compute_dimensions_string', string='dimensions_string')
+    dimensions_string = fields.Char(compute='_compute_dimensions_string', string='Common Dimensions')
     
     @api.depends('uom_id')
     def _compute_dimensions_string(self):
@@ -19,7 +19,7 @@ class ProductTemplate(models.Model):
                 if template.thickness:
                     template.dimensions_string += 'x' + template.thickness
                 else:
-                    thicknesses = template.product_variant_ids.mapped('thickness')
+                    thicknesses = template.product_variant_ids.filtered(lambda r: r.thickness != 0).mapped('thickness')
                     low = int(min(thicknesses))
                     high = int(max(thicknesses))
                     # for i, variant in template.product_variant_ids:
