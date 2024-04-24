@@ -24,7 +24,7 @@ $o-repeat-report-green: #587369 !default;
         display: inline-block;
         padding-bottom: 5px;
         position: relative;
-        margin-bottom: 3rem; 
+        margin-bottom: 2rem;  
     }
     
     h2:before {
@@ -39,6 +39,7 @@ $o-repeat-report-green: #587369 !default;
     table {
 
         margin-top: 2rem;
+        margin-bottom: 2rem;
         
 
         thead {

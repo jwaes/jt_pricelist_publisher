@@ -31,9 +31,9 @@ class ProductTemplate(models.Model):
                         #             low = variant.thickness
                         if low == high:
                             if low != 0.0:
-                                template.dimensions_string += 'x' + str(low)
+                                template.dimensions_string += 'x' + str(low)  + 'mm'
                         else:
-                            template.dimensions_string += 'x(' + str(low) + '-' + str(high) + ')'
+                            template.dimensions_string += 'x(' + str(low) + '-' + str(high) + ')'  + 'mm'
                     else:
                         template.dimensions_string = template.uom_id.name
             else:
