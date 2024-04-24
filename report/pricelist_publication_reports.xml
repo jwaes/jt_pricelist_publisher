@@ -30,7 +30,7 @@
     </record>    
 
     <record id="action_report_pricelist_publication_wizard" model="ir.actions.report">
-        <field name="name">Pricelist publication Wizard</field>
+        <field name="name">Pricelist Publication</field>
         <field name="model">pricelist.publishing.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">jt_pricelist_publisher.publication_report_wizard</field>
