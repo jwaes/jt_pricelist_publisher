@@ -11,7 +11,7 @@ class ProductTemplate(models.Model):
     
     @api.depends('uom_id')
     def _compute_dimensions_string(self):
-        pattern = '^.*\s([0-9x]*)$'
+        pattern = r'^.*\s([0-9x]*)$'
         for template in self:
             match = re.match(pattern, template.uom_id.name)
             if match:
