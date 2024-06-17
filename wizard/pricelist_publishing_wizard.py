@@ -31,6 +31,10 @@ class PricelistPublishingWizard(models.TransientModel):
 
     publication_instance_code = fields.Char(compute='_compute_publication_instance_code', string='publication_instance_code')
 
+    publication_report_name = fields.Char(compute='_compute_publication_report_name', string='publication_report_name')
+    
+
+
     pricelist_date = fields.Date(compute='_compute_pricelist_date', string='Pricelist Date')
 
     quarter_number = fields.Integer(compute='_compute_quarter_number', string='Quarter Number')
@@ -58,6 +62,12 @@ class PricelistPublishingWizard(models.TransientModel):
             rec.publication_instance_code = 'P%s/L%s/%s/%sQ%s/%s' % (rec.publication_id.id, rec.pricelist_id.id, rec.lang[:2].upper(), rec.pricelist_date.year, rec.quarter_number, rec.write_date.strftime('%Y%m%d%H%M'))
             # rec.publication_instance_code = 'blah'
 
+    @api.depends('publication_instance_code')
+    def _compute_publication_report_name(self):
+        for rec in self:
+            filename = rec.with_context(lang=rec.lang).publication_id.name + ' ' + rec.publication_instance_code.replace('/','_')
+            rec.publication_report_name = filename
+
     def _default_language(self):
         return get_lang(self.env).code
     
@@ -72,3 +82,10 @@ class PricelistPublishingWizard(models.TransientModel):
         }
         return self.env.ref('jt_pricelist_publisher.action_report_pricelist_publication_wizard').with_context(publication_id=self.publication_id.id).report_action(self.id, data=data)        
     
+    @api.depends('publication_report_name')
+    def _compute_display_name(self):
+        result = []
+        for record in self:
+            result.append((record.id, "%s" % (record.publication_report_name)))
+
+        return result

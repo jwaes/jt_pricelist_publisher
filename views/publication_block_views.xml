@@ -30,7 +30,7 @@
             </page>
             <page string="Template" name="template" attrs="{'invisible':[('block_type','not in', ['template','template_dimension','view'])]}">
                 <group>
-                <field name="view_id" attrs="{'readonly':True}"/>
+                <field name="view_id" attrs="{'readonly':False}"/>
                 <field name="model_name" invisible="1"/>
 
                 <field name="model_id" options="{'no_create': True, 'no_open': True}"  attrs="{'invisible':[('block_type','not in', ['template','template_dimension'])]}"/>                
