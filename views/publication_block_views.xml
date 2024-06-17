@@ -1,77 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-
-  <record id="pricelist_publication_block_view_tree" model="ir.ui.view">
-    <field name="name">pricelist.publication.block.view.tree</field>
-    <field name="model">pricelist.publication.block</field>
-    <field name="arch" type="xml">
-      <tree string="">
-        <field name="name" />
-        <field name="block_type" />
-      </tree>
-    </field>
-  </record>
-
-  <record id="pricelist_publication_block_view_form" model="ir.ui.view">
-    <field name="name">pricelist.publication.block.view.form</field>
-    <field name="model">pricelist.publication.block</field>
-    <field name="arch" type="xml">
-      <form string="">
-        <sheet>
-          <group>
-            <field name="name" />
-            <field name="block_type"/>
-
-          </group>
-          <notebook>
-            <page string="HTML" name="html" attrs="{'invisible':[('block_type','!=', 'html')]}">
-                <field name="html_content"/>
-            </page>
-            <page string="Template" name="template" attrs="{'invisible':[('block_type','not in', ['template','template_dimension','view'])]}">
-                <group>
-                <field name="view_id" attrs="{'readonly':False}"/>
-                <field name="model_name" invisible="1"/>
-
-                <field name="model_id" options="{'no_create': True, 'no_open': True}"  attrs="{'invisible':[('block_type','not in', ['template','template_dimension'])]}"/>                
-                <field name="filter_domain" widget="domain" options="{'model': 'model_name', 'in_dialog': True}" attrs="{'invisible':[('block_type','not in', ['template','template_dimension'])]}"/>
-                <field name="dimension_attribute_id" widget="tags" options="{'no_create': True, 'no_open': True}" attrs="{'invisible':[('block_type','not in', ['template_dimension'])]}"/>
-            </group>
-            </page>            
-        </notebook>          
-        </sheet>
-      </form>
-    </field>
-  </record>
-
-
-  <record id="pricelist_publication_block_action" model="ir.actions.act_window">
-    <field name="name">Pricelist publication blocks</field>
-    <field name="res_model">pricelist.publication.block</field>
-    <field name="view_mode">tree,form</field>
-
-  </record>
-
-
-  <record id="pricelist_publication_block_action_server" model="ir.actions.server">
-    <field name="name">Action Name</field>
-    <field name="model_id" ref="model_pricelist_publication_block" />
-    <field name="state">code</field>
-    <field name="code">
-      action = {
+ <record id="pricelist_publication_block_view_tree" model="ir.ui.view">
+  <field name="name">pricelist.publication.block.view.tree</field>
+  <field name="model">pricelist.publication.block</field>
+  <field name="arch" type="xml">
+   <tree string="">
+    <field name="name"/>
+    <field name="block_type"/>
+   </tree></field>
+ </record>
+ <record id="pricelist_publication_block_view_form" model="ir.ui.view">
+  <field name="name">pricelist.publication.block.view.form</field>
+  <field name="model">pricelist.publication.block</field>
+  <field name="arch" type="xml">
+   <form string="">
+    <sheet>
+     <group>
+      <field name="name"/>
+      <field name="block_type"/>
+     </group>
+     <notebook>
+      <page invisible="block_type != 'html'" name="html" string="HTML">
+       <field name="html_content"/>
+      </page>
+      <page invisible="block_type not in ['template', 'template_dimension', 'view']" name="template" string="Template">
+       <group>
+        <field name="view_id" readonly="False"/>
+        <field invisible="1" name="model_name"/>
+        <field invisible="block_type not in ['template', 'template_dimension']" name="model_id" options="{'no_create': True, 'no_open': True}"/>
+        <field invisible="block_type not in ['template', 'template_dimension']" name="filter_domain" options="{'model': 'model_name', 'in_dialog': True}" widget="domain"/>
+        <field invisible="block_type not in ['template_dimension']" name="dimension_attribute_id" options="{'no_create': True, 'no_open': True}" widget="tags"/>
+       </group>
+      </page>
+     </notebook>
+    </sheet>
+   </form></field>
+ </record>
+ <record id="pricelist_publication_block_action" model="ir.actions.act_window">
+  <field name="name">Pricelist publication blocks</field>
+  <field name="res_model">pricelist.publication.block</field>
+  <field name="view_mode">tree,form</field>
+ </record>
+ <record id="pricelist_publication_block_action_server" model="ir.actions.server">
+  <field name="name">Action Name</field>
+  <field name="model_id" ref="model_pricelist_publication_block"/>
+  <field name="state">code</field>
+  <field name="code">action = {
       "type": "ir.actions.act_window",
       "view_mode": "tree,form",
       "res_model": model._name,
-      }
-    </field>
-  </record>
-
-    <menuitem
-      id="pricelist_publication_blocks"
-      name="Publication blocks"
-      action="jt_pricelist_publisher.pricelist_publication_block_action"
-      parent="jt_pricelist_publisher.pricelist_publication_menu"
-    />
-
-
+      }</field>
+ </record>
+ <menuitem action="jt_pricelist_publisher.pricelist_publication_block_action" id="pricelist_publication_blocks" name="Publication blocks" parent="jt_pricelist_publisher.pricelist_publication_menu"/>
 </odoo>
