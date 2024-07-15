@@ -17,7 +17,7 @@ class ProductTemplate(models.Model):
             if match:
                 template.dimensions_string = match.group(1)
                 if template.thickness:
-                    template.dimensions_string += 'x' + template.thickness
+                    template.dimensions_string += 'x' + str(template.thickness)
                 else:
                     thicknesses = template.product_variant_ids.filtered(lambda r: r.thickness != 0).mapped('thickness')
                     if thicknesses :
