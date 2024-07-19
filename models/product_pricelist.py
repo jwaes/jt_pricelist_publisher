@@ -100,3 +100,17 @@ class PricelistItem(models.Model):
                 rec.daterange_q = rec._get_default_q()
                 rec.daterange_q_year = rec._get_default_q_year()
                 _logger.info("re-setting start and end dates")
+
+
+
+    @api.model
+    def create(self, vals):
+        result = super(PricelistItem, self).create(vals)                
+        result._calculate_daterange()
+        return result
+
+    @api.model
+    def write(self, vals):
+        result = super(PricelistItem, self).write(vals)
+        result._calculate_daterange()       
+        return result
