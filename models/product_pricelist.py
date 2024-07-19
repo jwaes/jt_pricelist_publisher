@@ -112,5 +112,5 @@ class PricelistItem(models.Model):
     @api.model
     def write(self, vals):
         result = super(PricelistItem, self).write(vals)
-        result._calculate_daterange()       
+        self._calculate_daterange()       
         return result
