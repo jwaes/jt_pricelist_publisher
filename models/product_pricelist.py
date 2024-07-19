@@ -14,14 +14,14 @@ class Pricelist(models.Model):
 
     description_internal = fields.Text('Description internal', help="This is for internal use only, describe for who this pricelist is intended, what discounts can be applied")
 
-    def write(self, vals):
-        res =  super().write(vals)
-        _logger.info("writing ... ")
-        _logger.info(vals)
-        _logger.info("====")
-        for item in self.item_ids:
-            item._calculate_daterange()
-        return res
+    # def write(self, vals):
+    #     res =  super().write(vals)
+    #     _logger.info("writing ... ")
+    #     _logger.info(vals)
+    #     _logger.info("====")
+    #     for item in self.item_ids:
+    #         item._calculate_daterange()
+    #     return res
 
 
 class PricelistItem(models.Model):
