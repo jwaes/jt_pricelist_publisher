@@ -33,12 +33,12 @@ class Report(models.Model):
     )    
 
 
-    def _render_qweb_pdf(self, res_ids=None, data=None):
-        if not self.env.context.get("res_ids"):
-            return super(Report, self.with_context(res_ids=res_ids))._render_qweb_pdf(
-                res_ids=res_ids, data=data
-            )
-        return super(Report, self)._render_qweb_pdf(res_ids=res_ids, data=data)
+    # def _render_qweb_pdf(self, res_ids=None, data=None):
+    #     if not self.env.context.get("res_ids"):
+    #         return super(Report, self.with_context(res_ids=res_ids))._render_qweb_pdf(
+    #             res_ids=res_ids, data=data
+    #         )
+    #     return super(Report, self)._render_qweb_pdf(res_ids=res_ids, data=data)
 
     def pdf_has_usable_pages(self, numpages):
         if numpages < 1:
@@ -69,9 +69,6 @@ class Report(models.Model):
             specific_paperformat_args=specific_paperformat_args,
             set_viewport_size=set_viewport_size,
         )
-
-        docids = self.env.context.get("res_ids", False)
-
 
         if not self.consider_watermark:
             return result
