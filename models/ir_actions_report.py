@@ -51,18 +51,21 @@ class Report(models.Model):
             )
         return True    
 
+
     @api.model
     def _run_wkhtmltopdf(
-        self,
-        bodies,
-        header=None,
-        footer=None,
-        landscape=False,
-        specific_paperformat_args=None,
-        set_viewport_size=False,
-    ):
+            self,
+            bodies,
+            report_ref=False,
+            header=None,
+            footer=None,
+            landscape=False,
+            specific_paperformat_args=None,
+            set_viewport_size=False):
+            
         result = super(Report, self)._run_wkhtmltopdf(
             bodies,
+            report_ref=report_ref,
             header=header,
             footer=footer,
             landscape=landscape,
