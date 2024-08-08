@@ -27,7 +27,6 @@
         'views/publication_views.xml',
         'views/publication_block_views.xml',
         'views/ir_actions_report.xml',
-        # 'views/templates.xml',
         'report/pricelist_publication_reports.xml',
         'report/pricelist_publication_report_templates.xml',
         'wizard/pricelist_publishing_wizard.xml',
@@ -35,8 +34,8 @@
 
     'assets': {
         'web.report_assets_common': [
-            'jt_pricelist_publisher/static/src/css/repeat_pricelist.css',
-            'jt_pricelist_publisher/report/assets/layout_pricelist.scss',
+            # 'jt_pricelist_publisher/static/src/css/repeat_pricelist.css',
+            'jt_pricelist_publisher/static/src/css/layout_pricelist.scss',
         ],
     },
     # only loaded in demonstration mode
