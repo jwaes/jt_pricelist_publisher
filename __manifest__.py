@@ -34,7 +34,6 @@
 
     'assets': {
         'web.report_assets_common': [
-            # 'jt_pricelist_publisher/static/src/css/repeat_pricelist.css',
             'jt_pricelist_publisher/static/src/css/layout_pricelist.scss',
         ],
     },

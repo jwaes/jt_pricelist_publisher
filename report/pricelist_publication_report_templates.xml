@@ -100,7 +100,7 @@
         </div>
 
 
-        <div t-attf-class="article o_report_layout_repeat"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+        <div t-attf-class="article o_report_layout_repeat_pricelist"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
   
             <div  style="page-break-after: always; height: 1px">
             <!-- empty first page-->    
