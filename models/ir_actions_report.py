@@ -76,7 +76,8 @@ class Report(models.Model):
         )
 
         if not self.consider_watermark:
-            logger.info("not consider_watermark")
+            logger.info("not consider_watermark for %s ", self.name)
+
             return result
 
         watermark = None
