@@ -24,7 +24,7 @@ except ImportError:
     logger.error("Can not import PyPDF2")
 
 
-class Report(models.Model):
+class IrActionsReport(models.Model):
     _inherit = "ir.actions.report"
 
     consider_watermark = fields.Boolean(
@@ -76,9 +76,9 @@ class Report(models.Model):
         )
 
         if not self.consider_watermark:
-            logger.info("not consider_watermark for %s ", self.name)
-
-            return result
+            logger.info("not consider_watermark for %s (%s) %s", self.name, self.paperformat_id, self.print_report_name )
+            logger.info("continue anyway")
+            # return result
 
         watermark = None
         publication_id = self.env.context.get("publication_id")
@@ -88,6 +88,8 @@ class Report(models.Model):
                 logger.info("found pdf_background")
                 watermark = b64decode(publication.pdf_background)
                 logger.info("created watermark")
+        else:
+            return result
 
         if not watermark:
             return result
