@@ -62,7 +62,9 @@ class Report(models.Model):
             landscape=False,
             specific_paperformat_args=None,
             set_viewport_size=False):
-            
+        
+        logger.info("_run_wkhtmltopdf")
+
         result = super(Report, self)._run_wkhtmltopdf(
             bodies,
             report_ref=report_ref,
@@ -74,6 +76,7 @@ class Report(models.Model):
         )
 
         if not self.consider_watermark:
+            logger.info("not consider_watermark")
             return result
 
         watermark = None
@@ -81,7 +84,9 @@ class Report(models.Model):
         if publication_id:
             publication = self.env['pricelist.publication'].browse(publication_id)
             if publication.pdf_background:
+                logger.info("found pdf_background")
                 watermark = b64decode(publication.pdf_background)
+                logger.info("created watermark")
 
         if not watermark:
             return result
@@ -89,8 +94,10 @@ class Report(models.Model):
         pdf = PdfFileWriter()
         pdf_watermark = None
         try:
+            logger.info("about to try pdf_watermark")
             pdf_watermark = PdfFileReader(BytesIO(watermark))
         except PdfReadError:
+            logger.info("exception ... pillow to the rescue ?")
             # let's see if we can convert this with pillow
             try:
                 Image.init()
@@ -116,6 +123,7 @@ class Report(models.Model):
         page_number = 0
 
         for page in PdfFileReader(BytesIO(result)).pages:
+            logger.info("page:")
             watermark_page = pdf.addBlankPage(
                 page.mediaBox.getWidth(), page.mediaBox.getHeight()
             )
