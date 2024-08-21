@@ -65,7 +65,7 @@ class IrActionsReport(models.Model):
         
         logger.info("_run_wkhtmltopdf")
 
-        result = super(Report, self)._run_wkhtmltopdf(
+        result = super(IrActionsReport, self)._run_wkhtmltopdf(
             bodies,
             report_ref=report_ref,
             header=header,
