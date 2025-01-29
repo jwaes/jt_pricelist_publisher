@@ -19,7 +19,7 @@ class PricelistPublication(models.Model):
     #     if default is None:
     #         default = {}
     #     if 'name' not in default:
-    #         default['name'] = _("(copy of) %s", self.name)
+    #         default['name'] = self.env._("(copy of) %s", self.name)
     #     if 'section_ids' not in default:
     #         default['section_ids'] = [(0, 0, section.copy_data()[0]) for section in self.section_ids]
     #     return super(PricelistPublication, self).copy_data(default)
@@ -30,7 +30,7 @@ class PricelistPublication(models.Model):
         vals_list = super().copy_data(default=default)
         if 'name' not in default:
             for pub, vals in zip(self, vals_list):
-                vals['name'] = _("(copy of) %s", pub.name)
+                vals['name'] = self.env._("(copy of) %s", pub.name)
         if 'section_ids' not in default:
             for pub, vals in zip(self, vals_list):
                 vals['section_ids'] = [(0, 0, section_vals) for section_vals in pub.section_ids.copy_data()]                
