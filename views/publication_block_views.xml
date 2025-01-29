@@ -26,7 +26,6 @@
       <page invisible="block_type not in ['template', 'template_dimension', 'view']" name="template" string="Template">
        <group>
         <field name="view_id" readonly="False"/>
-        <field invisible="1" name="model_name"/>
         <field invisible="block_type not in ['template', 'template_dimension']" name="model_id" options="{'no_create': True, 'no_open': True}"/>
         <field invisible="block_type not in ['template', 'template_dimension']" name="filter_domain" options="{'model': 'model_name', 'in_dialog': True}" widget="domain"/>
         <field invisible="block_type not in ['template_dimension']" name="dimension_attribute_id" options="{'no_create': True, 'no_open': True}" widget="tags"/>
