@@ -15,16 +15,26 @@ class PricelistPublication(models.Model):
     pdf_background = fields.Binary("Background")
     pdf_background_pages =  fields.Char("Background page numbers")
 
+    # def copy_data(self, default=None):
+    #     if default is None:
+    #         default = {}
+    #     if 'name' not in default:
+    #         default['name'] = _("(copy of) %s", self.name)
+    #     if 'section_ids' not in default:
+    #         default['section_ids'] = [(0, 0, section.copy_data()[0]) for section in self.section_ids]
+    #     return super(PricelistPublication, self).copy_data(default)
+
+
     def copy_data(self, default=None):
-        if default is None:
-            default = {}
+        default = dict(default or {})
+        vals_list = super().copy_data(default=default)
         if 'name' not in default:
-            default['name'] = _("(copy of) %s", self.name)
+            for pub, vals in zip(self, vals_list):
+                vals['name'] = _("(copy of) %s", pub.name)
         if 'section_ids' not in default:
-            default['section_ids'] = [(0, 0, section.copy_data()[0]) for section in self.section_ids]
-        return super(PricelistPublication, self).copy_data(default)
-
-
+            for pub, vals in zip(self, vals_list):
+                vals['section_ids'] = [(0, 0, section_vals) for section_vals in pub.section_ids.copy_data()]                
+        return vals_list
 
 class PricelistPublicationSection(models.Model):
     _name = 'pricelist.publication.section'
