@@ -2,27 +2,18 @@ from base64 import b64decode
 from io import BytesIO
 from logging import getLogger
 
-from PIL import Image
-
 from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
+from odoo.tools import pdf
 
 logger = getLogger(__name__)
 
 try:
     # we need this to be sure PIL has loaded PDF support
-    from PIL import PdfImagePlugin  # noqa: F401
+    from PIL import PdfImagePlugin, Image  # noqa: F401
     logger.info("PIL imported")
 except ImportError:
     logger.error("ImportError: The PdfImagePlugin could not be imported")
-
-try:
-    from PyPDF2 import PdfFileReader, PdfFileWriter  # pylint: disable=W0404
-    from PyPDF2.utils import PdfReadError  # pylint: disable=W0404
-    logger.info("PyPDF2 imported")
-except ImportError:
-    logger.error("Can not import PyPDF2")
-
 
 class IrActionsReport(models.Model):
     _inherit = "ir.actions.report"
@@ -94,11 +85,11 @@ class IrActionsReport(models.Model):
         if not watermark:
             return result
 
-        pdf = PdfFileWriter()
+        pdf_writer = pdf.PdfFileWriter()
         pdf_watermark = None
         try:
             logger.info("about to try pdf_watermark")
-            pdf_watermark = PdfFileReader(BytesIO(watermark))
+            pdf_watermark = pdf.PdfFileReader(BytesIO(watermark), strict=False)
         except PdfReadError:
             logger.info("exception ... pillow to the rescue ?")
             # let's see if we can convert this with pillow
@@ -112,7 +103,7 @@ class IrActionsReport(models.Model):
                 if isinstance(resolution, tuple):
                     resolution = resolution[0]
                 image.save(pdf_buffer, "pdf", resolution=resolution)
-                pdf_watermark = PdfFileReader(pdf_buffer)
+                pdf_watermark = pdf.PdfFileReader(pdf_buffer, strict=False)
             except Exception as e:
                 logger.exception("Failed to load watermark", e)
 
@@ -125,9 +116,9 @@ class IrActionsReport(models.Model):
 
         page_number = 0
 
-        for page in PdfFileReader(BytesIO(result)).pages:
+        for page in pdf.PdfFileReader(BytesIO(result)).pages:
             logger.info("page:")
-            watermark_page = pdf.addBlankPage(
+            watermark_page = pdf_writer.addBlankPage(
                 page.mediaBox.getWidth(), page.mediaBox.getHeight()
             )
             if page_number == 0 :
@@ -136,6 +127,6 @@ class IrActionsReport(models.Model):
             page_number += 1
 
         pdf_content = BytesIO()
-        pdf.write(pdf_content)
+        pdf_writer.write(pdf_content)
 
         return pdf_content.getvalue()

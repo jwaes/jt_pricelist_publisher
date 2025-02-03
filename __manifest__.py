@@ -41,9 +41,9 @@
     'demo': [
         'demo/demo.xml',
     ],
-    "external_dependencies": {
-        "python": [  # Python third party libraries required for module
-            "pypdf",
-        ]
-    },    
+    # "external_dependencies": {
+    #     "python": [  # Python third party libraries required for module
+    #         "pypdf",
+    #     ]
+    # },    
 }
