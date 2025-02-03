@@ -43,7 +43,7 @@
     ],
     "external_dependencies": {
         "python": [  # Python third party libraries required for module
-            "PyPDF2",
+            "pypdf",
         ]
     },    
 }
